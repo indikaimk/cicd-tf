@@ -2,24 +2,25 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = ">= 2.4.0"
+      version = ">= 2.41.0"
     }
   }
 }
 
-#provider "digitalocean" {
-  # Provider is configured using environment variables:
-  # DIGITALOCEAN_TOKEN, DIGITALOCEAN_ACCESS_TOKEN
-#}
+# provider "digitalocean" {
+#   # Provider is configured using environment variables:
+#   # DIGITALOCEAN_TOKEN, DIGITALOCEAN_ACCESS_TOKEN
+# }
 
 data "digitalocean_kubernetes_versions" "current" {
-  version_prefix = var.cluster_version
+  # version_prefix = var.cluster_version
 }
 
 resource "digitalocean_kubernetes_cluster" "primary" {
   name    = var.cluster_name
   region  = var.cluster_region
   version = data.digitalocean_kubernetes_versions.current.latest_version
+  # version = "1.30"
 
   node_pool {
     name       = "default"

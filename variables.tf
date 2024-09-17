@@ -1,5 +1,5 @@
 variable "cluster_version" {
-  default = "1.30.4-do.0"
+  default = "1.22"
 }
 
 variable "worker_count" {
@@ -12,5 +12,5 @@ variable "worker_size" {
 
 variable "write_kubeconfig" {
   type        = bool
-  default     = true
+  default     = false
 }

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = ">= 2.4.0"
+      version = ">= 2.41.0"
     }
     kubernetes = {
       source = "hashicorp/kubernetes"
@@ -15,12 +15,13 @@ terraform {
   }
 }
 
-resource "random_id" "cluster_name" {
-  byte_length = 5
-}
+# resource "random_id" "cluster_name" {
+#   byte_length = 5
+# }
 
 locals {
-  cluster_name = "tf-k8s-${random_id.cluster_name.hex}"
+  # cluster_name = "tf-k8s-${random_id.cluster_name.hex}"
+  cluster_name = "argocd-cluster"
 }
 
 module "doks-cluster" {
@@ -33,8 +34,8 @@ module "doks-cluster" {
   worker_count       = var.worker_count
 }
 
-module "kubernetes-argocd" {
-  source           = "./kubernetes-argocd"
+module "kubernetes-config" {
+  source           = "./kubernetes-config"
   cluster_name     = module.doks-cluster.cluster_name
   cluster_id       = module.doks-cluster.cluster_id
 
