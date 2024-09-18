@@ -10,18 +10,17 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.0.1"
+      version = ">= 2.15.0"
     }
   }
 }
 
-# resource "random_id" "cluster_name" {
-#   byte_length = 5
-# }
+resource "random_id" "cluster_name" {
+  byte_length = 5
+}
 
 locals {
-  # cluster_name = "tf-k8s-${random_id.cluster_name.hex}"
-  cluster_name = "argocd-cluster"
+  cluster_name = "argocd-cluster-${random_id.cluster_name.hex}"
 }
 
 module "doks-cluster" {
@@ -34,10 +33,18 @@ module "doks-cluster" {
   worker_count       = var.worker_count
 }
 
-module "kubernetes-config" {
-  source           = "./kubernetes-config"
+# module "kubernetes-config" {
+#   source           = "./kubernetes-config"
+#   cluster_name     = module.doks-cluster.cluster_name
+#   cluster_id       = module.doks-cluster.cluster_id
+
+#   write_kubeconfig = var.write_kubeconfig
+# }
+
+module "argo-cd" {
+  source           = "./kubernetes-argocd"
   cluster_name     = module.doks-cluster.cluster_name
   cluster_id       = module.doks-cluster.cluster_id
 
-  write_kubeconfig = var.write_kubeconfig
+  # write_kubeconfig = var.write_kubeconfig  
 }
